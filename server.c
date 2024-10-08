@@ -6,7 +6,7 @@
 /*   By: tbayrakt <tbayrakt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 19:30:40 by tanselbayra       #+#    #+#             */
-/*   Updated: 2024/10/08 10:48:46 by tbayrakt         ###   ########.fr       */
+/*   Updated: 2024/10/08 11:52:38 by tbayrakt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	signal_handler(int signum)
 	static int	result = 0;
 	static char	*final;
 
-	if (!final)
+	if (final == NULL)
 		final = ft_strdup("");
 	if (signum == SIGUSR1)
 		result = result + 0;
@@ -66,6 +66,7 @@ void	signal_handler(int signum)
 		if (result == '\0')
 		{
 			ft_printf("%s\n", final);
+			free(final);
 			final = NULL;
 		}
 		counter = 0;
@@ -84,6 +85,7 @@ int	main(void)
 	ft_printf("Server's PID: %i\n", pid);
 	signal_action.sa_handler = signal_handler;
 	signal_action.sa_flags = 0;
+	sigemptyset(&signal_action.sa_mask);
 	sigaction(SIGUSR1, &signal_action, NULL);
 	sigaction(SIGUSR2, &signal_action, NULL);
 	while (1)
